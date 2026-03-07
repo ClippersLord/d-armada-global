@@ -6,7 +6,7 @@ import { Tag } from './ui';
 export default function PostDisplay({ post }) {
   if (!post) {
     return (
-      <div className="max-w-3xl mx-auto px-6 pt-24 pb-16 text-center">
+      <div className="max-w-3xl mx-auto px-6 pt-24 pb-40 text-center">
         <h1 className="text-2xl font-bold text-text-bright mb-4">Content Not Found</h1>
         <p className="text-text-secondary">This page doesn&apos;t exist or has been removed.</p>
       </div>
@@ -14,7 +14,7 @@ export default function PostDisplay({ post }) {
   }
 
   return (
-    <article className="max-w-3xl mx-auto px-6 md:px-12 pt-24 pb-16">
+    <article className="max-w-3xl mx-auto px-6 md:px-12 pt-24 pb-40">
       {/* Meta */}
       <div className="flex items-center gap-3 mb-4 flex-wrap">
         <Tag>{post.category}</Tag>
@@ -54,7 +54,7 @@ export default function PostDisplay({ post }) {
 
       {/* Tags */}
       {post.tags && post.tags.length > 0 && (
-        <div className="flex gap-2 flex-wrap mt-10 pt-6 border-t border-border">
+        <div className="flex gap-2 flex-wrap mt-16 pt-6 border-t border-border">
           {post.tags.map(tag => (
             <span key={tag} className="text-[10px] text-text-muted border border-border rounded-full px-3 py-1">
               {tag}
@@ -64,7 +64,7 @@ export default function PostDisplay({ post }) {
       )}
 
       {/* Author */}
-      <div className="mt-8 pt-6 border-t border-border flex items-center gap-3">
+      <div className="mt-20 pt-6 border-t border-border flex items-center gap-3">
         <div className="w-10 h-10 rounded-full bg-brand/10 flex items-center justify-center text-brand text-lg">⚓</div>
         <div>
           <div className="text-sm text-text-bright font-medium">{post.author || 'D-Armada Global'}</div>
