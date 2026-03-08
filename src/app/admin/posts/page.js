@@ -90,7 +90,7 @@ export default async function AdminPosts({ searchParams }) {
                 </td>
                 <td className="p-4 text-right">
                   <Link
-                    href={`/admin/posts/${post.id}/edit`}
+                    href={`/admin/posts/edit/${post.id}`}
                     className="text-brand text-xs hover:underline"
                   >
                     Edit
