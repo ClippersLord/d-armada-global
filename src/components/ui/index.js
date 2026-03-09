@@ -69,7 +69,7 @@ export function Section({ label, title, subtitle, children, className = "" }) {
   return (
     // We changed pb-16 to pb-48 to create more space before the footer
     // We also added ${className} so you can add extra styles later if needed
-    <div className={`w-full max-w-7xl mx-auto px-6 md:px-16 pt-24 pb-48 ${className}`}>
+    <div className={`w-full max-w-7xl mx-auto px-6 md:px-16 pt-24 pb-52 ${className}`}>
       {label && <div className="text-[10px] tracking-[5px] uppercase text-brand mb-2 font-semibold">{label}</div>}
       <h1 className="text-2xl md:text-3xl font-bold text-text-bright mb-2">{title}</h1>
       {subtitle && <p className="text-text-secondary text-sm mb-8 max-w-xl font-light">{subtitle}</p>}
