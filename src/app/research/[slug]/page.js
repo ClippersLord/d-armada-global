@@ -54,7 +54,7 @@ export default async function ResearchPost({ params }) {
               {/* Renders your rich text content from the database */}
               <div 
                 className="text-text-secondary text-sm font-light leading-relaxed prose prose-invert max-w-none"
-                dangerouslySetInnerHTML={{ __html: post.content }} 
+                dangerouslySetInnerHTML={{ __html: post.body }} 
               />
             </Card>
           </div>
