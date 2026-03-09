@@ -6,7 +6,6 @@ import { Section, Card, Tag, Pill, Stat, Btn } from '@/components/ui';
 export default function TechPage() {
   const [tab, setTab] = useState("EA Shop");
   const [dbContent, setDbContent] = useState({});
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadTechData() {
@@ -18,7 +17,6 @@ export default function TechPage() {
         contentMap[`${item.page_slug}_body`] = item.content;
       });
       setDbContent(contentMap);
-      setLoading(false);
     }
     loadTechData();
   }, []);
@@ -28,15 +26,15 @@ export default function TechPage() {
   return (
     <Section 
       label="D-Armada Technologies" 
-      title={getContent('tech-main', 'title', tab)} 
+      title={tab} 
       subtitle={
         tab === "EA Shop" ? "Production-grade MQL5 Expert Advisors" : 
         tab === "EA Performance" ? "Live metrics from funded accounts" : 
         "R&D pipeline and upcoming features"
       }
     >
-      {/* 3-Tab Switcher from your Demo */}
-      <div className="flex gap-2 mb-8 flex-wrap">
+      {/* Exact 3-Tab SubNav from your Demo */}
+      <div className="flex gap-2 mb-10 flex-wrap">
         {["EA Performance", "EA Shop", "Technology Lab"].map(i => (
           <Pill key={i} active={tab === i} onClick={() => setTab(i)}>{i}</Pill>
         ))}
@@ -44,6 +42,7 @@ export default function TechPage() {
 
       {tab === "EA Shop" && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Flagship EA */}
           <Card>
             <Tag>Flagship</Tag>
             <h3 className="text-lg font-bold text-text-bright mt-4 mb-2">
@@ -53,11 +52,18 @@ export default function TechPage() {
               {getContent('ea-1', 'body', "Multi-timeframe breakout EA with prop firm compliance, adaptive risk, session-aware entries.")}
             </p>
             <div className="text-2xl font-black text-brand mb-6">$297/mo</div>
+            <div className="space-y-2 mb-8">
+               {["3-state market philosophy", "Prop firm monitoring", "ATR management", "Session-aware"].map(f => (
+                 <div key={f} className="flex items-center gap-2 text-xs text-text-secondary">
+                   <span className="text-brand">✓</span> {f}
+                 </div>
+               ))}
+            </div>
             <Btn primary full>Subscribe</Btn>
           </Card>
 
-          {/* D-Armada Bundle with the Premium Glow */}
-          <Card style={{ border: '1px solid #20B2AA55', boxShadow: '0 0 40px #20B2AA0C' }}>
+          {/* Bundle with Glow Effect from Demo */}
+          <Card className="border-brand/40 shadow-[0_0_40px_rgba(32,178,170,0.05)]">
             <Tag>Best Value</Tag>
             <h3 className="text-lg font-bold text-text-bright mt-4 mb-2">
               {getContent('ea-bundle', 'title', "D-Armada Bundle")}
@@ -66,6 +72,13 @@ export default function TechPage() {
               {getContent('ea-bundle', 'body', "Full ecosystem access: all current EAs, future releases, priority support, private Discord.")}
             </p>
             <div className="text-2xl font-black text-brand mb-6">$397/mo</div>
+            <div className="space-y-2 mb-8">
+               {["All current EAs", "Future releases", "Priority support", "Private Discord"].map(f => (
+                 <div key={f} className="flex items-center gap-2 text-xs text-text-secondary">
+                   <span className="text-brand">✓</span> {f}
+                 </div>
+               ))}
+            </div>
             <Btn primary full>Get Full Access</Btn>
           </Card>
         </div>
@@ -73,7 +86,7 @@ export default function TechPage() {
 
       {tab === "EA Performance" && (
         <div>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-10">
             <Card><Stat value="+23.7%" label="YTD Return" color="#34D399" /></Card>
             <Card><Stat value="54.1%" label="Win Rate" /></Card>
             <Card><Stat value="1.83R" label="Avg Winner" /></Card>
@@ -85,10 +98,12 @@ export default function TechPage() {
       )}
 
       {tab === "Technology Lab" && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {[
             { t: "Phase 2: ML Integration", s: "IN PROGRESS", d: "Offline CSV-to-Python pipeline. 500+ trade outcomes collected for model training.", col: "#FBBF24" },
-            { t: "Performance Dashboard", s: "PLANNED", d: "Real-time web dashboard with D-Armada visual identity. Equity curves, trade journal, risk analytics.", col: "#436660" }
+            { t: "Performance Dashboard", s: "PLANNED", d: "Real-time web dashboard with D-Armada visual identity. Equity curves, risk analytics.", col: "#436660" },
+            { t: "Correlation EA", s: "RESEARCH", d: "Paired-instrument forex reversal strategy. Shared base currency correlation.", col: "#436660" },
+            { t: "Multi-Asset Scaler", s: "SHIPPED", d: "Dynamic lot sizing across instruments with unified risk budgeting.", col: "#34D399" },
           ].map(entry => (
             <Card key={entry.t}>
               <Tag color={entry.col}>{entry.s}</Tag>
