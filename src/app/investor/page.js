@@ -22,18 +22,35 @@ export default async function InvestorPage() {
       </div>
 
       {/* Strategic Pillars */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
-        {[
-          ['Revenue Model', 'Subscription licensing for EAs, premium research memberships, and education course sales. Three independent recurring revenue streams.'],
-          ['Market Opportunity', 'The retail algorithmic trading market is growing rapidly as traders demand systematic approaches. Prop firm ecosystem creates natural demand for compliant, tested systems.'],
-          ['Competitive Moat', 'Vertically integrated: we produce the research, build the algorithms, and train the traders. No dependency on third-party signals or infrastructure.'],
-        ].map(([t, d]) => (
-          <Card key={t}>
-            <h3 className="text-base font-bold text-text-bright mb-2">{t}</h3>
-            <p className="text-text-secondary text-sm leading-relaxed font-light">{d}</p>
-          </Card>
-        ))}
-      </div>
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+  {[
+    {
+      t: 'Revenue Model', 
+      d: 'Live trading/capital management, Subscription licensing for EAs, and premium mentorship. Three independent recurring revenue streams.',
+      icon: '📊'
+    },
+    {
+      t: 'Market Opportunity', 
+      d: 'The retail algorithmic trading market is growing rapidly. The prop firm ecosystem creates natural demand for compliant, tested systems.',
+      icon: '📈'
+    },
+    {
+      t: 'Competitive Moat', 
+      d: 'Vertically integrated: we produce the research, build the algorithms, and train the traders. No dependency on third-party infrastructure.',
+      icon: '🛡️'
+    },
+  ].map((pillar) => (
+    <Card key={pillar.t} className="bg-surface-1 border-border/50">
+      <div className="text-2xl mb-4">{pillar.icon}</div>
+      <h3 className="text-text-bright font-bold mb-3 tracking-wide uppercase text-sm">
+        {pillar.t}
+      </h3>
+      <p className="text-text-secondary text-xs leading-relaxed font-light">
+        {pillar.d}
+      </p>
+    </Card>
+  ))}
+</div>
 
       {/* Investor Updates */}
       {posts && posts.length > 0 && (
