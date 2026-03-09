@@ -1,83 +1,122 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { Section, Card, Tag } from '@/components/ui';
-import Link from 'next/link';
+import { Section, Card, Tag, Pill, Stat, Btn } from '@/components/ui';
 
 export default function TechPage() {
-  const [products, setProducts] = useState([]);
+  const [tab, setTab] = useState("EA Shop");
+  const [dbContent, setDbContent] = useState({});
   const [loading, setLoading] = useState(true);
 
+  // Verbatim Lab Data from your Demo
+  const LAB_ENTRIES = [
+    { t: "Phase 2: ML Integration", status: "IN PROGRESS", d: "Offline CSV-to-Python pipeline. 500+ trade outcomes collected for model training. Targeting context-aware entry filtering.", col: "#FBBF24" },
+    { t: "Performance Dashboard", status: "PLANNED", d: "Real-time web dashboard with D-Armada visual identity. Equity curves, trade journal, risk analytics.", col: "#436660" },
+    { t: "Correlation EA", status: "RESEARCH", d: "Paired-instrument forex reversal strategy. Shared base currency correlation for mean-reversion entries.", col: "#436660" },
+    { t: "Multi-Asset Scaler", status: "SHIPPED", d: "Dynamic lot sizing across instruments with unified risk budgeting per account.", col: "#34D399" },
+  ];
+
   useEffect(() => {
-    const fetchTech = async () => {
+    async function loadTechData() {
       const supabase = createClient();
-      // Fetching active EAs and Tools from your Arsenal
-      const { data } = await supabase
-        .from('products')
-        .select('*')
-        .eq('is_active', true)
-        .order('created_at', { ascending: false });
       
-      setProducts(data || []);
+      // Fetch CMS Content
+      const { data: contentData } = await supabase.from('page_content').select('*');
+      const contentMap = {};
+      contentData?.forEach(item => { 
+        contentMap[`${item.page_slug}_title`] = item.section_title;
+        contentMap[`${item.page_slug}_body`] = item.content;
+      });
+      setDbContent(contentMap);
       setLoading(false);
-    };
-    fetchTech();
+    }
+    loadTechData();
   }, []);
+
+  const getContent = (slug, type, fallback) => dbContent[`${slug}_${type}`] || fallback;
 
   return (
     <Section 
       label="D-Armada Technologies" 
-      title="Algorithmic Arsenal" 
-      subtitle="Precision trading software engineered for Gold, Bitcoin, and WTI breakout operations."
+      title={getContent('tech-main', 'title', tab)} 
+      subtitle={
+        tab === "EA Shop" ? "Production-grade MQL5 Expert Advisors" : 
+        tab === "EA Performance" ? "Live metrics from funded accounts" : 
+        "R&D pipeline and upcoming features"
+      }
     >
-      {/* Sub-navigation for Lab and Performance */}
-      <div className="flex gap-4 mb-12 border-b border-border pb-4">
-        <Link href="/tech/lab" className="text-[10px] uppercase tracking-widest font-bold text-text-muted hover:text-brand transition-all">
-          Research Lab
-        </Link>
-        <Link href="/tech/performance" className="text-[10px] uppercase tracking-widest font-bold text-text-muted hover:text-brand transition-all">
-          Backtest Data
-        </Link>
+      <div className="flex gap-2 mb-8 flex-wrap">
+        {["EA Performance", "EA Shop", "Technology Lab"].map(i => (
+          <Pill key={i} active={tab === i} onClick={() => setTab(i)}>{i}</Pill>
+        ))}
       </div>
 
-      {loading ? (
-        <div className="py-20 text-center text-brand animate-pulse text-xs uppercase tracking-widest">Scanning Arsenal...</div>
-      ) : (
+      {tab === "EA Shop" && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products.map((item) => (
-            <Card key={item.id} className="group hover:border-brand/40 transition-all bg-surface-1 flex flex-col h-full">
-              <div className="flex justify-between items-start mb-4">
-                <Tag>{item.category || 'Expert Advisor'}</Tag>
-                <span className="text-[10px] text-text-muted font-mono">v{item.version || '1.0'}</span>
-              </div>
-              
-              <h3 className="text-lg font-bold text-text-bright mb-2 group-hover:text-brand transition-colors">
-                {item.name}
-              </h3>
-              
-              <p className="text-text-secondary text-sm leading-relaxed font-light mb-6 flex-grow">
-                {item.short_description || 'Algorithmic execution system designed for D-Armada Global frameworks.'}
-              </p>
+          {/* Flagship EA */}
+          <Card>
+            <Tag>Flagship</Tag>
+            <h3 className="text-lg font-bold text-text-bright mt-4 mb-2">
+              {getContent('ea-1', 'title', "D-Armada Breakout v3.0")}
+            </h3>
+            <p className="text-text-secondary text-sm font-light mb-4">
+              {getContent('ea-1', 'body', "Multi-timeframe breakout EA with prop firm compliance, adaptive risk, session-aware entries.")}
+            </p>
+            <div className="text-2xl font-black text-brand mb-6">$297/mo</div>
+            <ul className="space-y-2 mb-8">
+              {["3-state market philosophy", "Prop firm monitoring", "ATR management", "Session-aware"].map(f => (
+                <li key={f} className="text-xs text-text-secondary flex gap-2">
+                  <span className="text-brand">✓</span> {f}
+                </li>
+              ))}
+            </ul>
+            <Btn primary full>Subscribe</Btn>
+          </Card>
 
-              <div className="mt-auto pt-6 border-t border-border/50 flex justify-between items-center">
-                <div className="text-brand font-bold">
-                  {item.price_cents > 0 ? `$${(item.price_cents / 100).toFixed(0)}` : 'FREE'}
-                </div>
-                <Link 
-                  href={`/tech/${item.slug || item.id}`}
-                  className="bg-brand/10 text-brand hover:bg-brand hover:text-surface-bg px-4 py-2 rounded text-[10px] font-bold uppercase tracking-widest transition-all"
-                >
-                  View Specs
-                </Link>
-              </div>
+          {/* Bundle - Matching the "Glow" and "Best Value" from your demo */}
+          <Card style={{ border: '1px solid #20B2AA55', boxShadow: '0 0 40px #20B2AA0C' }}>
+            <Tag>Best Value</Tag>
+            <h3 className="text-lg font-bold text-text-bright mt-4 mb-2">
+              {getContent('ea-bundle', 'title', "D-Armada Bundle")}
+            </h3>
+            <p className="text-text-secondary text-sm font-light mb-4">
+              {getContent('ea-bundle', 'body', "Full ecosystem access: all current EAs, future releases, priority support, private Discord.")}
+            </p>
+            <div className="text-2xl font-black text-brand mb-6">$397/mo</div>
+            <ul className="space-y-2 mb-8">
+              {["All current EAs", "Future releases", "Priority support", "Private Discord"].map(f => (
+                <li key={f} className="text-xs text-text-secondary flex gap-2">
+                  <span className="text-brand">✓</span> {f}
+                </li>
+              ))}
+            </ul>
+            <Btn primary full>Get Full Access</Btn>
+          </Card>
+        </div>
+      )}
+
+      {tab === "EA Performance" && (
+        <div>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+            <Card><Stat value="+23.7%" label="YTD Return" color="#34D399" /></Card>
+            <Card><Stat value="54.1%" label="Win Rate" /></Card>
+            <Card><Stat value="1.83R" label="Avg Winner" /></Card>
+            <Card><Stat value="-3.1%" label="Max DD" color="#F87171" /></Card>
+            <Card><Stat value="117" label="Total Trades" /></Card>
+          </div>
+          <p className="text-text-muted text-[11px] italic">Live prop firm accounts. Past performance does not guarantee future results.</p>
+        </div>
+      )}
+
+      {tab === "Technology Lab" && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {LAB_ENTRIES.map(entry => (
+            <Card key={entry.t}>
+              <Tag color={entry.col}>{entry.status}</Tag>
+              <h3 className="text-base font-bold text-text-bright mt-4 mb-2">{entry.t}</h3>
+              <p className="text-text-secondary text-sm font-light leading-relaxed">{entry.d}</p>
             </Card>
           ))}
-
-          {products.length === 0 && (
-            <div className="col-span-full py-20 text-center bg-surface-bg border border-dashed border-border rounded-xl">
-              <p className="text-text-muted text-sm">The arsenal is currently being calibrated. Check back soon.</p>
-            </div>
-          )}
         </div>
       )}
     </Section>
