@@ -2,124 +2,118 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { Section, Card, Tag, Pill } from '@/components/ui';
-import Link from 'next/link';
 
-export default function TradingOperations() {
-  const [activeTab, setActiveTab] = useState('philosophy'); // Toggles between Philosophy and Performance
-  const [loading, setLoading] = useState(true);
-  
-  // Create state to hold all your dynamic text, pre-wired for full CMS control.
-  const [content, setContent] = useState({
-    main: { title: 'Systematic Operations', content: 'Our proprietary approach to algorithmic execution across Gold, BTC, and major FX pairs.' },
-    breakout: { title: 'Breakouts', desc: 'Capturing state transitions from balance to impulse, targeting key liquidity pools.' },
-    metrics1: { val: '+3.1%', label: 'Monthly Avg Gain' },
-    metrics2: { val: '✓ VERIFIED', label: 'Myfxbook-verified' }
-  });
+const PERF = [
+  { month: "Jan 2026", trades: 47, winRate: "54.2%", avgR: "1.8R", pnl: "+8.4%", dd: "-3.1%" },
+  { month: "Feb 2026", trades: 52, winRate: "52.8%", avgR: "2.1R", pnl: "+11.2%", dd: "-2.7%" },
+  { month: "Mar 2026", trades: 18, winRate: "55.6%", avgR: "1.6R", pnl: "+4.1%", dd: "-1.8%" },
+];
+
+export default function TradingPage() {
+  const [tab, setTab] = useState("Strategies");
+  const [content, setContent] = useState({});
 
   useEffect(() => {
-    const fetchContent = async () => {
+    async function loadContent() {
       const supabase = createClient();
-      
-      // Multi-fetch all the needed text rows at once.
-      const { data } = await supabase
-        .from('page_content')
-        .select('*')
-        .in('page_slug', ['trading-philosophy', 'trading-strategies', 'trading-metrics-1', 'trading-metrics-2']);
-      
-      if (data) {
-        // Map the database response to our UI structure.
-        const main = data.find(d => d.page_slug === 'trading-philosophy');
-        const breakout = data.find(d => d.page_slug === 'trading-strategies');
-        const metric1 = data.find(d => d.page_slug === 'trading-metrics-1');
-        const metric2 = data.find(d => d.page_slug === 'trading-metrics-2');
-        
-        setContent({
-          main: { title: main?.section_title, content: main?.content },
-          breakout: { title: breakout?.section_title, desc: breakout?.content },
-          metrics1: { val: metric1?.section_title, label: metric1?.content },
-          metrics2: { val: metric2?.section_title, label: metric2?.content }
-        });
-      }
-      setLoading(false);
-    };
-    fetchContent();
+      const { data } = await supabase.from('page_content').select('*');
+      const contentMap = {};
+      data?.forEach(item => { contentMap[item.page_slug] = item; });
+      setContent(contentMap);
+    }
+    loadContent();
   }, []);
 
   return (
-    <Section label="D-Armada Trading" title={content.main.title} subtitle={content.main.content}>
-      
-      {/* Dual Tab Toggle - Philosophy / Performance (from your demo visuals) */}
-      <div className="flex border-b border-border mb-12">
-        <button 
-          onClick={() => setActiveTab('philosophy')}
-          className={`pb-4 px-6 text-xs uppercase tracking-widest font-bold transition-all ${activeTab === 'philosophy' ? 'border-b-2 border-brand text-brand' : 'text-text-muted hover:text-text-secondary'}`}
-        >
-          Philosophy & Strategies
-        </button>
-        <button 
-          onClick={() => setActiveTab('performance')}
-          className={`pb-4 px-6 text-xs uppercase tracking-widest font-bold transition-all ${activeTab === 'performance' ? 'border-b-2 border-brand text-brand' : 'text-text-muted hover:text-text-secondary'}`}
-        >
-          Live Performance Data
-        </button>
+    <Section 
+      label="D-Armada Trading" 
+      title="Systematic Trading Operations" 
+      subtitle={content['trading-main']?.content || "Our proprietary approach to algorithmic execution across Gold, BTC, and major FX pairs."}
+    >
+      {/* Exact SubNav from your Demo */}
+      <div className="flex gap-2 mb-8 flex-wrap">
+        {["Strategies", "Markets Traded", "Performance Reports", "Risk Framework"].map(i => (
+          <Pill key={i} active={tab === i} onClick={() => setTab(i)}>{i}</Pill>
+        ))}
       </div>
 
-      {activeTab === 'philosophy' ? (
-        <div className="space-y-12">
-          {/* Main Strategy Highlight - Perfect match for your demo's breakout strategy breakdown */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center bg-surface-1 p-10 border border-border rounded-xl">
-            <div className="md:col-span-2 space-y-3">
-              <div className="flex items-center gap-3">
-                <div className="text-3xl text-brand font-black">🎯</div>
-                <Tag>CORE METHODOLOGY</Tag>
+      {tab === "Strategies" && (
+        <div className="grid gap-4">
+          {[
+            { tag: "Primary", title: "Breakout Capture", slug: "strat-breakout" },
+            { tag: "Secondary", title: "Pullback Continuation", slug: "strat-pullback" },
+            { tag: "Conditional", title: "Failure Reversal", slug: "strat-failure" }
+          ].map((s) => (
+            <Card key={s.title}>
+              <div className="flex items-center gap-3 mb-3">
+                <Tag>{s.tag}</Tag>
+                <h3 className="text-lg font-bold text-text-bright">{s.title}</h3>
               </div>
-              <h3 className="text-xl font-bold text-text-bright tracking-wide">{content.breakout.title}</h3>
-              <p className="text-text-muted text-sm font-light leading-relaxed max-w-lg">
-                Identify Balance, capture the Impulse transition, and execute to key liquidity targets. 
-                Structured reversals identify false breakouts and failure patterns for institutional entry.
+              <p className="text-text-secondary text-sm font-light leading-relaxed">
+                {content[s.slug]?.content || "Loading strategy details..."}
               </p>
-            </div>
-            <div className="text-center p-6 border border-border bg-surface-bg rounded-lg">
-              <p className="text-text-muted text-xs uppercase tracking-widest mb-1">Status</p>
-              <p className="text-profit font-black text-xs uppercase tracking-wider">Active Operations</p>
-              <Pill className="mt-4 text-[10px] w-full text-center">WTI • GOLD • BTC</Pill>
-            </div>
-          </div>
-
-          {/* Reversal and Risk Cards (from your demo visuals) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="hover:border-brand/30 border-border/50 bg-surface-1">
-              <p className="text-2xl text-brand font-black mb-3">🛡️</p>
-              <h3 className="text-lg font-bold text-text-bright mb-1">Reversal Operations</h3>
-              <p className="text-text-secondary text-sm font-light leading-relaxed">Structured identifying false breakouts and liquidation points for reversal capture.</p>
             </Card>
-            <Card className="hover:border-brand/30 border-border/50 bg-surface-1">
-              <p className="text-2xl text-loss font-black mb-3">⚖️</p>
-              <h3 className="text-lg font-bold text-text-bright mb-1">Risk & Session Management</h3>
-              <p className="text-text-secondary text-sm font-light leading-relaxed">Dynamic lot sizing, ATR-based floors, and rigid session filtering (LDN/NY).</p>
-            </Card>
-          </div>
+          ))}
         </div>
-      ) : (
-        /* Performance Tab - Features your dynamic monthly targets display and Myfxbook verification */
-        <div className="space-y-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="p-8 bg-surface-1 border border-border rounded-xl text-center">
-              <p className="text-text-muted text-[10px] uppercase tracking-[0.2em] mb-3">D-Armada Principal Account</p>
-              <h2 className="text-4xl font-extrabold text-brand tracking-tighter">{content.metrics1.val}</h2>
-              <p className="text-sm text-text-bright mt-1 font-semibold">{content.metrics1.label}</p>
-              <Pill className="mt-4 text-[10px]">GOLD • XAUUSD Focus</Pill>
-            </div>
-            <div className="p-8 bg-surface-1 border border-border rounded-xl text-center flex flex-col items-center justify-center">
-              <p className="text-text-muted text-[10px] uppercase tracking-[0.2em] mb-2">Funded Prop Firm Status</p>
-              <Tag color="profit">{content.metrics2.val}</Tag>
-              <p className="text-sm text-text-bright mt-3 font-semibold">{content.metrics2.label}</p>
-            </div>
-          </div>
-          {/* We will map the live Myfxbook data widget here later */}
-          <div className="h-60 bg-surface-1 border border-border rounded-xl flex items-center justify-center text-center">
-            <p className="text-text-muted text-xs font-mono uppercase tracking-widest">Integrating Live Myfxbook Widget...</p>
-          </div>
+      )}
+
+      {tab === "Markets Traded" && (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          {[
+            ["XAU/USD", "Gold", "Primary"], ["BTC/USD", "Bitcoin", "Primary"], 
+            ["EUR/USD", "Euro", "Secondary"], ["GBP/USD", "Cable", "Secondary"], 
+            ["USD/JPY", "Yen", "Watchlist"], ["US30", "Dow Jones", "Watchlist"]
+          ].map(([sym, name, status]) => (
+            <Card key={sym}>
+              <div className="text-xl font-extrabold text-text-bright mb-1">{sym}</div>
+              <div className="text-xs text-text-muted mb-3">{name}</div>
+              <Tag color={status === "Primary" ? "#34D399" : status === "Secondary" ? "#FBBF24" : "#436660"}>{status}</Tag>
+            </Card>
+          ))}
+        </div>
+      )}
+
+      {tab === "Performance Reports" && (
+        <div className="overflow-x-auto bg-surface-1 border border-border rounded-xl">
+          <table className="w-full text-sm text-left">
+            <thead>
+              <tr className="border-b border-border">
+                {["Month", "Trades", "Win Rate", "Avg R", "P&L", "Max DD"].map(h => (
+                  <th key={h} className="p-4 text-[10px] uppercase tracking-widest text-text-muted font-bold">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {PERF.map(r => (
+                <tr key={r.month} className="border-b border-border/30 hover:bg-surface-2/50">
+                  <td className="p-4 text-text-bright font-semibold">{r.month}</td>
+                  <td className="p-4 text-text-secondary">{r.trades}</td>
+                  <td className="p-4 text-text-secondary">{r.winRate}</td>
+                  <td className="p-4 text-text-secondary">{r.avgR}</td>
+                  <td className="p-4 text-profit font-bold">{r.pnl}</td>
+                  <td className="p-4 text-loss">{r.dd}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {tab === "Risk Framework" && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {[
+            { title: "Position Sizing", slug: "risk-pos" },
+            { title: "Drawdown Control", slug: "risk-dd" },
+            { title: "Session Management", slug: "risk-session" },
+            { title: "ATR Floor Protection", slug: "risk-atr" }
+          ].map((r) => (
+            <Card key={r.title}>
+              <h3 className="text-base font-bold text-text-bright mb-2">{r.title}</h3>
+              <p className="text-text-secondary text-sm font-light leading-relaxed">
+                {content[r.slug]?.content || "Loading risk details..."}
+              </p>
+            </Card>
+          ))}
         </div>
       )}
     </Section>
