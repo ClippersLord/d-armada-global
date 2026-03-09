@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { Section, Card, Tag, Pill, Stat } from '@/components/ui';
 
@@ -58,7 +59,7 @@ export default function TechPage() {
         </div>
       )}
 
-      {/* ─── HUB 2: EA SHOP (Including Missing Trade Manager) ─── */}
+      {/* ─── HUB 2: EA SHOP (Wired to Deep-Dive) ─── */}
       {activeHub === "EA Shop" && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-in slide-in-from-bottom-4 duration-500">
           {/* Flagship */}
@@ -69,10 +70,15 @@ export default function TechPage() {
               Multi-timeframe breakout EA with prop firm compliance, adaptive risk, and session-aware entries.
             </p>
             <div className="text-2xl font-black text-[#20B2AA] mb-6">$297/mo</div>
-            <button className="w-full bg-[#20B2AA]/10 text-[#20B2AA] border border-[#20B2AA]/20 py-3 rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-[#20B2AA] transition-all">Subscribe</button>
+            {/* LINKED TO DEEP DIVE */}
+            <Link href="/tech/ea-1" className="block w-full">
+              <button className="w-full bg-[#20B2AA]/10 text-[#20B2AA] border border-[#20B2AA]/20 py-3 rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-[#20B2AA] hover:text-[#0A1212] transition-all">
+                View Full Specs
+              </button>
+            </Link>
           </Card>
 
-          {/* MISSING: Trade Manager */}
+          {/* Trade Manager */}
           <Card className="bg-[#0F1A1A] border-[#1A302E]">
             <Tag>Standard</Tag>
             <h3 className="text-lg font-bold text-[#E0F0ED] mt-4 mb-2">{getContent('ea-manager', 'title', "D-Armada Trade Manager v1.0")}</h3>
@@ -80,7 +86,12 @@ export default function TechPage() {
               Standalone trade management — R-step trailing, ATR floor protection, and intelligent volatility exits.
             </p>
             <div className="text-2xl font-black text-[#20B2AA] mb-6">$147/mo</div>
-            <button className="w-full bg-[#20B2AA]/10 text-[#20B2AA] border border-[#20B2AA]/20 py-3 rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-[#20B2AA] transition-all">Subscribe</button>
+            {/* LINKED TO DEEP DIVE */}
+            <Link href="/tech/ea-manager" className="block w-full">
+              <button className="w-full bg-[#20B2AA]/10 text-[#20B2AA] border border-[#20B2AA]/20 py-3 rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-[#20B2AA] hover:text-[#0A1212] transition-all">
+                View Full Specs
+              </button>
+            </Link>
           </Card>
 
           {/* Bundle */}
@@ -91,11 +102,16 @@ export default function TechPage() {
               Full ecosystem access: all current EAs, future releases, priority support, and private Discord.
             </p>
             <div className="text-2xl font-black text-[#20B2AA] mb-6">$397/mo</div>
-            <button className="w-full bg-[#20B2AA] text-[#0A1212] py-3 rounded-lg text-xs font-bold uppercase tracking-widest shadow-lg shadow-[#20B2AA]/20 hover:brightness-110 transition-all">Get Full Access</button>
+            {/* LINKED TO DEEP DIVE */}
+            <Link href="/tech/ea-bundle" className="block w-full">
+              <button className="w-full bg-[#20B2AA] text-[#0A1212] py-3 rounded-lg text-xs font-bold uppercase tracking-widest shadow-lg shadow-[#20B2AA]/20 hover:brightness-110 transition-all">
+                Get Full Access
+              </button>
+            </Link>
           </Card>
         </div>
       )}
-
+      
       {/* ─── HUB 3: TECHNOLOGY LAB (Including Missing Scaler) ─── */}
       {activeHub === "Technology Lab" && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-in fade-in duration-500">
