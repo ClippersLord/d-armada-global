@@ -3,8 +3,9 @@ import NavBar from '@/components/layout/NavBar';
 import Footer from '@/components/layout/Footer';
 
 export const metadata = {
-  title: 'D-Armada Global',
-  description: 'Institutional-grade research. Battle-tested algorithms. Education that transforms retail traders into systematic operators.',
+  title: 'D-Armada Global | Institutional Algorithmic Trading & Research',
+  description: 'Elite MQL5 & Python Expert Advisors, Prop-Firm Risk Frameworks, and Institutional Market Research. Master automated trading across Gold, Bitcoin, and WTI.',
+  keywords: 'Algorithmic Trading, MQL5 Expert Advisor, Python Trading Bots, Gold (XAUUSD) Strategy, Bitcoin Trading, WTI Crude Oil, Prop Firm Funded Trading, Forex Mentorship',
 };
 
 export default function RootLayout({ children }) {
