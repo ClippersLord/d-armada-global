@@ -31,7 +31,7 @@ export default async function InvestorPage() {
     },
     {
       t: 'Market Opportunity', 
-      d: 'The retail algorithmic trading market is growing rapidly. The prop firm ecosystem creates natural demand for compliant, tested systems.',
+      d: 'The retail algorithmic trading market is growing rapidly as traders demand systematic approaches. The prop firm ecosystem creates natural demand for compliant, tested systems.',
       icon: '📈'
     },
     {
