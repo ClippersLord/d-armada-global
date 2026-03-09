@@ -1,60 +1,58 @@
-import Link from 'next/link';
-import { createServerSupabase } from '@/lib/supabase/server';
-import { Section, Card, Tag } from '@/components/ui';
+'use client';
+import { useState, useEffect } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import { Section, Card, Tag, Btn } from '@/components/ui';
 
-export const metadata = { title: 'EA Shop — D-Armada Technologies' };
+export default function ShopPage() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-export default async function ShopPage() {
-  const supabase = createServerSupabase();
-  const { data: products } = await supabase
-    .from('products')
-    .select('*')
-    .eq('is_active', true)
-    .order('tier', { ascending: false });
+  useEffect(() => {
+    async function loadShop() {
+      const supabase = createClient();
+      const { data } = await supabase
+        .from('products')
+        .select('*')
+        .eq('is_active', true)
+        .order('price_cents', { ascending: true });
+      setProducts(data || []);
+      setLoading(false);
+    }
+    loadShop();
+  }, []);
 
   return (
-    <Section label="D-Armada Technologies" title="EA Shop" subtitle="Production-grade MQL5 Expert Advisors. Every system runs on live funded accounts before release.">
-      {products && products.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {products.map(p => (
-            <Link key={p.id} href={`/shop/${p.slug}`}>
-              <Card glow={p.tier === 'bundle'} className="relative h-full">
-                {p.tier === 'bundle' && (
-                  <div className="absolute -top-px left-6 right-6 h-0.5 bg-gradient-to-r from-transparent via-brand to-transparent" />
-                )}
-                {p.tier === 'bundle' && <Tag>Best Value</Tag>}
-                <h3 className="font-sora text-lg font-bold text-text-bright mt-2 mb-1.5">{p.name}</h3>
-                {p.version && <span className="text-[10px] text-text-muted">v{p.version}</span>}
-                <p className="text-text-secondary text-xs leading-relaxed mt-2 mb-5 font-light">
-                  {p.short_description}
-                </p>
-                <div className="font-sora text-2xl font-extrabold text-brand mb-5">
-                  ${(p.price_cents / 100).toFixed(0)}<span className="text-sm font-normal text-text-muted">/{p.billing_interval === 'one_time' ? '' : p.billing_interval}</span>
-                </div>
-                {p.features?.map((f, i) => (
-                  <div key={i} className="flex items-center gap-2 mb-2">
-                    <span className="text-brand text-[10px]">✓</span>
-                    <span className="text-text-secondary text-xs">{f}</span>
-                  </div>
-                ))}
-                <div className="mt-5">
-                  <span className={`inline-block w-full text-center py-3 rounded-lg text-xs font-semibold tracking-widest uppercase ${
-                    p.tier === 'bundle'
-                      ? 'bg-gradient-to-br from-brand to-brand-dark text-surface-bg'
-                      : 'border border-border text-text-secondary'
-                  }`}>
-                    {p.tier === 'bundle' ? 'Get Full Access' : 'View Details'}
-                  </span>
-                </div>
-              </Card>
-            </Link>
-          ))}
-        </div>
-      ) : (
-        <div className="text-center py-16">
-          <p className="text-text-muted text-sm">Products coming soon. Check back shortly.</p>
-        </div>
-      )}
+    <Section 
+      label="D-Armada Shop" 
+      title="The Algorithmic Collection" 
+      subtitle="Select the tier that fits your capital and risk requirements. All systems are prop-firm compliant."
+    >
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {products.map((p) => (
+          <Card key={p.id} glow={p.tier === 'bundle'}>
+            <div className="flex justify-between items-start mb-4">
+              <Tag color={p.tier === 'flagship' ? "#20B2AA" : "#436660"}>{p.tier}</Tag>
+              <span className="text-[10px] text-text-muted font-mono">v{p.version}</span>
+            </div>
+            <h3 className="text-xl font-bold text-text-bright mb-2">{p.name}</h3>
+            <p className="text-text-secondary text-sm font-light mb-6 h-12 line-clamp-2">{p.short_description}</p>
+            
+            <div className="text-3xl font-black text-brand mb-6">
+              ${(p.price_cents / 100).toFixed(0)}<span className="text-xs text-text-muted font-normal"> /mo</span>
+            </div>
+
+            <ul className="space-y-3 mb-8">
+              {p.features?.map((f, i) => (
+                <li key={i} className="text-xs text-text-secondary flex gap-2">
+                  <span className="text-brand">✓</span> {f}
+                </li>
+              ))}
+            </ul>
+
+            <Btn primary={p.tier === 'bundle'} full>Purchase License</Btn>
+          </Card>
+        ))}
+      </div>
     </Section>
   );
 }
