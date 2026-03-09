@@ -24,7 +24,7 @@ export default function HomePage() {
           <Link href="/research">
             <Button primary>Explore Research</Button>
           </Link>
-          <Link href="/shop">
+          <Link href="/tech">
             <Button>View EAs</Button>
           </Link>
         </div>
