@@ -31,24 +31,33 @@ export const NAV_ITEMS = [
   { key: 'home', label: 'Home', href: '/' },
   { key: 'about', label: 'About', href: '/about' },
   {
-    key: 'trading', label: 'D-Armada Trading', href: '/trading', sub: [
-      { label: 'Strategies', href: '/trading/strategies' },
-      { label: 'Markets Traded', href: '/trading/markets' },
-      { label: 'Performance Reports', href: '/trading/performance' },
-      { label: 'Risk Framework', href: '/trading/risk' },
+    key: 'trading', 
+    label: 'D-Armada Trading', 
+    href: '/trading', 
+    sub: [
+      { label: 'Strategies', href: '/trading' }, // Fixed: Point to main hub
+      { label: 'Markets Traded', href: '/trading' }, // Fixed: Point to main hub
+      { label: 'Performance Reports', href: '/trading' }, // Fixed: Point to main hub
+      { label: 'Risk Framework', href: '/trading' }, // Fixed: Point to main hub
     ]
   },
   {
-    key: 'research', label: 'D-Armada Research', href: '/research', sub: [
-      { label: 'Market Research', href: '/research' },
-      { label: 'Learn @ D-Armada', href: '/learn' },
+    key: 'research', 
+    label: 'D-Armada Research', 
+    href: '/research', 
+    sub: [
+      { label: 'Market Research', href: '/research' }, 
+      { label: 'Learn @ D-Armada', href: '/research' }, // Fixed: Point to research hub
     ]
   },
   {
-    key: 'tech', label: 'D-Armada Technologies', href: '/shop', sub: [
-      { label: 'EA Performance', href: '/tech/performance' },
-      { label: 'EA Shop', href: '/shop' },
-      { label: 'Technology Lab', href: '/tech/lab' },
+    key: 'tech', 
+    label: 'D-Armada Technologies', 
+    href: '/tech', // Fixed: href must match the folder /tech
+    sub: [
+      { label: 'EA Performance', href: '/tech' }, // Fixed: Point to main hub
+      { label: 'EA Shop', href: '/tech' },        // Fixed: Point to main hub
+      { label: 'Technology Lab', href: '/tech' }, // Fixed: Point to main hub
     ]
   },
   { key: 'intel', label: 'Market Intelligence', href: '/intelligence' },
