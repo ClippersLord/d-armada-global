@@ -4,15 +4,13 @@ import { createClient } from '@/lib/supabase/client';
 import { Section, Card, Tag, Pill, Stat } from '@/components/ui';
 
 export default function TechPage() {
-  // 1. Tab State - This creates the 3 Hubs exactly like your demo
+  // This state controls which of the 3 "Hubs" is currently visible
   const [tab, setTab] = useState("EA Shop");
   const [dbContent, setDbContent] = useState({});
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadTechData() {
       const supabase = createClient();
-      // Fetch dynamic content from your 'page_content' table
       const { data } = await supabase.from('page_content').select('*');
       const contentMap = {};
       data?.forEach(item => { 
@@ -20,7 +18,6 @@ export default function TechPage() {
         contentMap[`${item.page_slug}_body`] = item.content;
       });
       setDbContent(contentMap);
-      setLoading(false);
     }
     loadTechData();
   }, []);
@@ -37,8 +34,9 @@ export default function TechPage() {
         "R&D pipeline and upcoming features"
       }
     >
-      {/* ─── HUB NAVIGATION (Exact Demo Architecture) ─── */}
-      <div className="flex gap-2 mb-10 flex-wrap border-b border-border/30 pb-6">
+      {/* ─── HUB NAVIGATION ─── */}
+      {/* This matches the exact pill-based navigation from your demo */}
+      <div className="flex gap-2 mb-10 flex-wrap border-b border-white/5 pb-8">
         {["EA Performance", "EA Shop", "Technology Lab"].map(hub => (
           <Pill key={hub} active={tab === hub} onClick={() => setTab(hub)}>
             {hub}
@@ -48,17 +46,18 @@ export default function TechPage() {
 
       {/* ─── HUB 1: EA PERFORMANCE ─── */}
       {tab === "EA Performance" && (
-        <div className="space-y-10">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            <Card className="text-center bg-surface-1"><Stat value="+23.7%" label="YTD Return" color="#34D399" /></Card>
-            <Card className="text-center bg-surface-1"><Stat value="54.1%" label="Win Rate" /></Card>
-            <Card className="text-center bg-surface-1"><Stat value="1.83R" label="Avg Winner" /></Card>
-            <Card className="text-center bg-surface-1"><Stat value="-3.1%" label="Max DD" color="#F87171" /></Card>
-            <Card className="text-center bg-surface-1"><Stat value="117" label="Total Trades" /></Card>
+        <div className="animate-in fade-in duration-500">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-10">
+            <Card className="text-center bg-[#0F1A1A]"><Stat value="+23.7%" label="YTD Return" color="#34D399" /></Card>
+            <Card className="text-center bg-[#0F1A1A]"><Stat value="54.1%" label="Win Rate" /></Card>
+            <Card className="text-center bg-[#0F1A1A]"><Stat value="1.83R" label="Avg Winner" /></Card>
+            <Card className="text-center bg-[#0F1A1A]"><Stat value="-3.1%" label="Max DD" color="#F87171" /></Card>
+            <Card className="text-center bg-[#0F1A1A]"><Stat value="117" label="Total Trades" /></Card>
           </div>
-          <div className="bg-surface-1 border border-border rounded-xl p-8 text-center">
-            <p className="text-text-muted text-xs font-mono uppercase tracking-widest">
-              Live Verified Myfxbook Feed Integration Pending...
+          
+          <div className="bg-[#0F1A1A] border border-white/10 rounded-xl p-12 text-center">
+            <p className="text-[#436660] text-xs font-mono uppercase tracking-[0.2em]">
+              Synchronizing Live Myfxbook Feed...
             </p>
           </div>
         </div>
@@ -66,36 +65,36 @@ export default function TechPage() {
 
       {/* ─── HUB 2: EA SHOP ─── */}
       {tab === "EA Shop" && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Flagship Product */}
-          <Card className="flex flex-col h-full bg-surface-1">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in slide-in-from-bottom-4 duration-500">
+          {/* Flagship EA */}
+          <Card className="flex flex-col h-full bg-[#0F1A1A]">
             <Tag>Flagship</Tag>
-            <h3 className="text-xl font-bold text-text-bright mt-4 mb-2">
+            <h3 className="text-xl font-bold text-[#E0F0ED] mt-4 mb-2">
               {getContent('ea-1', 'title', "D-Armada Breakout v3.0")}
             </h3>
-            <p className="text-text-secondary text-sm font-light mb-6 leading-relaxed">
+            <p className="text-[#7A9E99] text-sm font-light mb-6 leading-relaxed">
               {getContent('ea-1', 'body', "Multi-timeframe breakout EA with prop firm compliance, adaptive risk, and session-aware entries.")}
             </p>
             <div className="mt-auto">
-              <div className="text-2xl font-black text-brand mb-6">$297/mo</div>
-              <button className="w-full bg-brand/10 text-brand border border-brand/20 py-3 rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-brand hover:text-surface-bg transition-all">
+              <div className="text-2xl font-black text-[#20B2AA] mb-6">$297/mo</div>
+              <button className="w-full bg-[#20B2AA]/10 text-[#20B2AA] border border-[#20B2AA]/20 py-3 rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-[#20B2AA] hover:text-[#0A1212] transition-all">
                 Subscribe to Arsenal
               </button>
             </div>
           </Card>
 
-          {/* Bundle - Premium Highlight */}
-          <Card className="flex flex-col h-full border-brand/40 bg-surface-1 shadow-[0_0_40px_rgba(32,178,170,0.08)]">
+          {/* Bundle with Demo Glow Effect */}
+          <Card className="flex flex-col h-full border-[#20B2AA]/40 bg-[#0F1A1A] shadow-[0_0_40px_rgba(32,178,170,0.08)]">
             <Tag>Best Value</Tag>
-            <h3 className="text-xl font-bold text-text-bright mt-4 mb-2">
+            <h3 className="text-xl font-bold text-[#E0F0ED] mt-4 mb-2">
               {getContent('ea-bundle', 'title', "D-Armada Bundle")}
             </h3>
-            <p className="text-text-secondary text-sm font-light mb-6 leading-relaxed">
+            <p className="text-[#7A9E99] text-sm font-light mb-6 leading-relaxed">
               {getContent('ea-bundle', 'body', "Full ecosystem access: all current EAs, future releases, priority support, and private Discord.")}
             </p>
             <div className="mt-auto">
-              <div className="text-2xl font-black text-brand mb-6">$397/mo</div>
-              <button className="w-full bg-brand text-surface-bg py-3 rounded-lg text-xs font-bold uppercase tracking-widest shadow-lg shadow-brand/20 hover:brightness-110 transition-all">
+              <div className="text-2xl font-black text-[#20B2AA] mb-6">$397/mo</div>
+              <button className="w-full bg-[#20B2AA] text-[#0A1212] py-3 rounded-lg text-xs font-bold uppercase tracking-widest shadow-lg shadow-[#20B2AA]/20 hover:brightness-110 transition-all">
                 Get Full Access
               </button>
             </div>
@@ -105,20 +104,20 @@ export default function TechPage() {
 
       {/* ─── HUB 3: TECHNOLOGY LAB ─── */}
       {tab === "Technology Lab" && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-in fade-in duration-500">
           {[
             { id: 'lab-1', t: "Phase 2: ML Integration", s: "IN PROGRESS", d: "Offline CSV-to-Python pipeline. 500+ trade outcomes collected for model training.", col: "#FBBF24" },
             { id: 'lab-2', t: "Correlation EA", s: "RESEARCH", d: "Paired-instrument forex reversal strategy based on shared currency strength.", col: "#436660" },
             { id: 'lab-3', t: "Multi-Asset Scaler", s: "SHIPPED", d: "Dynamic lot sizing across instruments with unified risk budgeting.", col: "#34D399" }
           ].map(entry => (
-            <Card key={entry.id} className="bg-surface-1">
+            <Card key={entry.id} className="bg-[#0F1A1A]">
               <div className="mb-4">
                 <Tag color={entry.col}>{entry.s}</Tag>
               </div>
-              <h3 className="text-lg font-bold text-text-bright mb-2">
+              <h3 className="text-lg font-bold text-[#E0F0ED] mb-2">
                 {getContent(entry.id, 'title', entry.t)}
               </h3>
-              <p className="text-text-secondary text-sm font-light leading-relaxed">
+              <p className="text-[#7A9E99] text-sm font-light leading-relaxed">
                 {getContent(entry.id, 'body', entry.d)}
               </p>
             </Card>
