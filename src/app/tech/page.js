@@ -4,7 +4,6 @@ import { createClient } from '@/lib/supabase/client';
 import { Section, Card, Tag, Pill, Stat } from '@/components/ui';
 
 export default function TechPage() {
-  // Hub State: Matches the demo's seamless switching logic
   const [activeHub, setActiveHub] = useState("EA Shop");
   const [dbContent, setDbContent] = useState({});
 
@@ -34,7 +33,7 @@ export default function TechPage() {
         "R&D pipeline and upcoming features"
       }
     >
-      {/* ─── HUB NAVIGATION (Exact Demo Style) ─── */}
+      {/* ─── HUB NAVIGATION ─── */}
       <div className="flex gap-3 mb-12 border-b border-white/5 pb-6 overflow-x-auto">
         {["EA Performance", "EA Shop", "Technology Lab"].map(hub => (
           <Pill key={hub} active={activeHub === hub} onClick={() => setActiveHub(hub)}>
@@ -43,7 +42,7 @@ export default function TechPage() {
         ))}
       </div>
 
-      {/* ─── HUB 1: EA PERFORMANCE ─── */}
+      {/* ─── HUB 1: PERFORMANCE ─── */}
       {activeHub === "EA Performance" && (
         <div className="animate-in fade-in duration-700">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-10">
@@ -53,69 +52,63 @@ export default function TechPage() {
             <Card className="text-center bg-[#0F1A1A] border-[#1A302E]"><Stat value="-3.1%" label="Max DD" color="#F87171" /></Card>
             <Card className="text-center bg-[#0F1A1A] border-[#1A302E]"><Stat value="117" label="Total Trades" /></Card>
           </div>
-          
-          
-
           <div className="bg-[#0F1A1A] border border-[#1A302E] rounded-xl p-16 text-center">
-            <p className="text-[#436660] text-[10px] font-mono uppercase tracking-[0.3em] animate-pulse">
-              Connecting Live Myfxbook Feed...
-            </p>
+            <p className="text-[#436660] text-[10px] font-mono uppercase tracking-[0.3em]">Connecting Live Myfxbook Feed...</p>
           </div>
         </div>
       )}
 
-      {/* ─── HUB 2: EA SHOP ─── */}
+      {/* ─── HUB 2: EA SHOP (Including Missing Trade Manager) ─── */}
       {activeHub === "EA Shop" && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-in slide-in-from-bottom-4 duration-500">
-          {/* Flagship EA */}
+          {/* Flagship */}
           <Card className="bg-[#0F1A1A] border-[#1A302E]">
             <Tag>Flagship</Tag>
-            <h3 className="text-xl font-bold text-[#E0F0ED] mt-4 mb-2">
-              {getContent('ea-1', 'title', "D-Armada Breakout v3.0")}
-            </h3>
+            <h3 className="text-lg font-bold text-[#E0F0ED] mt-4 mb-2">{getContent('ea-1', 'title', "D-Armada Breakout v3.0")}</h3>
             <p className="text-[#7A9E99] text-sm font-light mb-6 leading-relaxed">
-              {getContent('ea-1', 'body', "Multi-timeframe breakout EA with prop firm compliance and adaptive risk.")}
+              Multi-timeframe breakout EA with prop firm compliance, adaptive risk, and session-aware entries.
             </p>
             <div className="text-2xl font-black text-[#20B2AA] mb-6">$297/mo</div>
-            <button className="w-full bg-[#20B2AA]/10 text-[#20B2AA] border border-[#20B2AA]/20 py-3 rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-[#20B2AA] hover:text-[#0A1212] transition-all">
-              Subscribe
-            </button>
+            <button className="w-full bg-[#20B2AA]/10 text-[#20B2AA] border border-[#20B2AA]/20 py-3 rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-[#20B2AA] transition-all">Subscribe</button>
           </Card>
 
-          {/* Bundle - Premium Glow Effect from Demo */}
+          {/* MISSING: Trade Manager */}
+          <Card className="bg-[#0F1A1A] border-[#1A302E]">
+            <Tag>Standard</Tag>
+            <h3 className="text-lg font-bold text-[#E0F0ED] mt-4 mb-2">{getContent('ea-manager', 'title', "D-Armada Trade Manager v1.0")}</h3>
+            <p className="text-[#7A9E99] text-sm font-light mb-6 leading-relaxed">
+              Standalone trade management — R-step trailing, ATR floor protection, and intelligent volatility exits.
+            </p>
+            <div className="text-2xl font-black text-[#20B2AA] mb-6">$147/mo</div>
+            <button className="w-full bg-[#20B2AA]/10 text-[#20B2AA] border border-[#20B2AA]/20 py-3 rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-[#20B2AA] transition-all">Subscribe</button>
+          </Card>
+
+          {/* Bundle */}
           <Card className="border-[#20B2AA]/40 bg-[#0F1A1A] shadow-[0_0_50px_rgba(32,178,170,0.1)]">
             <Tag>Best Value</Tag>
-            <h3 className="text-xl font-bold text-[#E0F0ED] mt-4 mb-2">
-              {getContent('ea-bundle', 'title', "D-Armada Bundle")}
-            </h3>
+            <h3 className="text-xl font-bold text-[#E0F0ED] mt-4 mb-2">{getContent('ea-bundle', 'title', "D-Armada Bundle")}</h3>
             <p className="text-[#7A9E99] text-sm font-light mb-6 leading-relaxed">
-              {getContent('ea-bundle', 'body', "Full ecosystem access: all current EAs, future releases, and private Discord.")}
+              Full ecosystem access: all current EAs, future releases, priority support, and private Discord.
             </p>
             <div className="text-2xl font-black text-[#20B2AA] mb-6">$397/mo</div>
-            <button className="w-full bg-[#20B2AA] text-[#0A1212] py-3 rounded-lg text-xs font-bold uppercase tracking-widest shadow-lg shadow-[#20B2AA]/20 hover:brightness-110 transition-all">
-              Get Full Access
-            </button>
+            <button className="w-full bg-[#20B2AA] text-[#0A1212] py-3 rounded-lg text-xs font-bold uppercase tracking-widest shadow-lg shadow-[#20B2AA]/20 hover:brightness-110 transition-all">Get Full Access</button>
           </Card>
         </div>
       )}
 
-      {/* ─── HUB 3: TECHNOLOGY LAB ─── */}
+      {/* ─── HUB 3: TECHNOLOGY LAB (Including Missing Scaler) ─── */}
       {activeHub === "Technology Lab" && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-in fade-in duration-500">
           {[
-            { id: 'lab-1', t: "Phase 2: ML Integration", s: "IN PROGRESS", d: "Offline CSV-to-Python pipeline. 500+ trade outcomes collected for model training.", col: "#FBBF24" },
-            { id: 'lab-2', t: "Correlation EA", s: "RESEARCH", d: "Paired-instrument forex reversal strategy based on shared currency strength.", col: "#436660" }
+            { id: 'lab-1', t: "Phase 2: ML Integration", s: "IN PROGRESS", d: "Offline CSV-to-Python pipeline for model training. Targeting context-aware entry filtering.", col: "#FBBF24" },
+            { id: 'lab-2', t: "Performance Dashboard", s: "PLANNED", d: "Real-time web dashboard with D-Armada visual identity. Equity curves and risk analytics.", col: "#436660" },
+            { id: 'lab-3', t: "Correlation EA", s: "RESEARCH", d: "Paired-instrument forex reversal strategy based on shared currency strength.", col: "#436660" },
+            { id: 'lab-4', t: "Multi-Asset Scaler", s: "SHIPPED", d: "Dynamic lot sizing across instruments with unified risk budgeting per account.", col: "#34D399" }
           ].map(entry => (
-            <Card key={entry.t} className="bg-[#0F1A1A] border-[#1A302E]">
-              <div className="mb-4">
-                <Tag color={entry.col}>{entry.s}</Tag>
-              </div>
-              <h3 className="text-lg font-bold text-[#E0F0ED] mb-2">
-                {getContent(entry.id, 'title', entry.t)}
-              </h3>
-              <p className="text-[#7A9E99] text-sm font-light leading-relaxed">
-                {getContent(entry.id, 'body', entry.d)}
-              </p>
+            <Card key={entry.id} className="bg-[#0F1A1A] border-[#1A302E]">
+              <div className="mb-4"><Tag color={entry.col}>{entry.s}</Tag></div>
+              <h3 className="text-lg font-bold text-[#E0F0ED] mb-2">{getContent(entry.id, 'title', entry.t)}</h3>
+              <p className="text-[#7A9E99] text-sm font-light leading-relaxed">{getContent(entry.id, 'body', entry.d)}</p>
             </Card>
           ))}
         </div>
